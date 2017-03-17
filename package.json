@@ -23,6 +23,7 @@
   "dependencies": {
     "react": "^0.14.8",
     "react-dom": "^0.14.8",
-    "react-loading": "0.0.9"
+    "react-loading": "0.0.9",
+    "react-spreadsheet-component": "0.5.1"
   }
 }
