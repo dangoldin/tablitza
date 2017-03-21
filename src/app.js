@@ -46,23 +46,25 @@ class Spreadsheet extends Component {
 class Main extends Component {
     constructor(props){
         super(props)
+
+        this.state = {
+            config: {
+                'row': 5,
+                'col': 5
+            },
+            data : [
+                [1,2],
+                [3,4],
+                [5,6]
+            ]
+        }
     }
 
     render(){
-        const config = {
-            'row': 5,
-            'col': 5
-        }
-
-        const data = [
-            [1,2],
-            [3,4]
-        ]
-
         return (
             <div>
                 <h1>Tablitza</h1>
-                <Spreadsheet spreadsheet={data} />
+                <Spreadsheet spreadsheet={this.state.data} />
             </div>
         )
     }
