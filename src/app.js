@@ -3,45 +3,8 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
-class Cell extends Component {
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        return (
-            <td>
-                <input type="text" value={this.props.value} />
-            </td>
-        )
-    }
-}
-
-class Spreadsheet extends Component {
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
-        const Rows = this.props.spreadsheet.map(function(row) {
-            const Row = row.map(function(cell) {
-                return <Cell value={cell} />
-            })
-            return (
-                <tr>
-                    {Row}
-                </tr>
-            )
-        })
-        return (
-            <table>
-                <tbody>
-                    {Rows}
-                </tbody>
-            </table>
-        )
-    }
-}
+import ReactDataSheet from 'react-datasheet';
+// import 'react-datasheet/lib/react-datasheet.css';
 
 class Main extends Component {
     constructor(props){
@@ -52,10 +15,10 @@ class Main extends Component {
                 'row': 5,
                 'col': 5
             },
-            data : [
-                [1,2],
-                [3,4],
-                [5,6]
+            data: [
+                [{value: 1},{value: 2}],
+                [{value: 3},{value: 4}],
+                [{value: 5},{value: 6}]
             ]
         }
     }
@@ -64,7 +27,19 @@ class Main extends Component {
         return (
             <div>
                 <h1>Tablitza</h1>
-                <Spreadsheet spreadsheet={this.state.data} />
+                <ReactDataSheet
+                    data={this.state.data}
+                    valueRenderer={(cell) => cell.value}
+                    onChange={(cell, colI, rowJ, value) =>
+                        this.setState({
+                            data: this.state.data.map((col) =>
+                                col.map((rowCell) =>
+                                    (rowCell == cell) ? ({value: value}) : rowCell
+                                )
+                            )
+                        })
+                    }
+                />
             </div>
         )
     }
