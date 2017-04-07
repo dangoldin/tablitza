@@ -4,7 +4,6 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import ReactDataSheet from 'react-datasheet';
-// import 'react-datasheet/lib/react-datasheet.css';
 
 class Main extends Component {
     constructor(props){
