@@ -5,7 +5,8 @@
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "compile": "browserify -t [ browserify-css --autoInject=true ] -t [ babelify --presets [ react es2015 ] ] src/app.js -o js/app.js"
+    "compile": "browserify -t [ browserify-css --autoInject=true ] -t [ babelify --presets [ react es2015 ] ] src/app.js -o js/app.js",
+    "watch": "watchify -t [ browserify-css --autoInject=true ] -t [ babelify --presets [ react es2015 ] ] src/app.js -o js/app.js"
   },
   "repository": "https://github.com/dangoldin/tablitza",
   "keywords": [
@@ -19,12 +20,13 @@
     "babel-preset-react": "6.23.0",
     "babelify": "7.3.0",
     "browserify": "14.3.0",
-    "browserify-css": "0.10.0"
+    "browserify-css": "0.10.0",
+    "watchify": "3.9.0"
   },
   "dependencies": {
     "electron-reload": "1.1.0",
     "react": "15.4.2",
-    "react-datasheet": "1.2.2",
+    "react-datasheet": "1.2.3",
     "react-dom": "15.4.2",
     "react-loading": "0.0.9"
   }

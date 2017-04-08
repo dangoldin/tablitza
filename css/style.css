@@ -1,3 +1,37 @@
-/*table {
-    border-spacing: 0;
-}*/
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Open Sans,sans-serif;
+    display: block;
+}
+
+.sheet-container {
+    width: 500px;
+}
+
+table {
+    display: table;
+    border-spacing: 2px;
+    border-color: grey;
+}
+
+table.data-grid {
+    margin: auto;
+    width: 100%;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+}
+
+td, th {
+    display: table-cell;
+}
