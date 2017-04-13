@@ -15,13 +15,27 @@ class Main extends Component {
                 'col': 5
             },
             data: [
-                [{value: '', readOnly: true}, {value: 'A', readOnly: true}],
+                [{value: '', readOnly: true}, {value: 'A', readOnly: true}, {value: '+', readOnly: true}],
                 [{value: 1, readOnly: true},{value: 4}],
                 [{value: 2, readOnly: true},{value: 6}],
                 [{value: 3, readOnly: true},{value: 8}],
-                [{value: 4, readOnly: true},{value: 10}]
+                [{value: 4, readOnly: true},{value: 10}],
+                [{value: '', readOnly: false, component: (
+                    <button onClick={() => this.insertRow() }>
+                        +
+                    </button>
+                ), forceComponent: true}]
             ]
         }
+    }
+
+    insertRow() {
+        let data = this.state.data;
+        data.push([{value: '', readOnly: false}]);
+
+        this.setState({
+            data: data
+        })
     }
 
     render(){
