@@ -9,40 +9,47 @@ class Main extends Component {
     constructor(props){
         super(props)
 
-        const addRowCell = {value: '', readOnly: true, component: (
+        const origData = [
+            [{value: '', readOnly: true}, {value: 'A', readOnly: true}, this.getAddColCell()],
+            [{value: 1, readOnly: true}],
+            [{value: 2, readOnly: true}],
+            [{value: 3, readOnly: true}],
+            [{value: 4, readOnly: true}],
+            [this.getAddRowCell()]
+        ];
+
+        const origConfig = {
+            rows: 10,
+            cols: 5
+        }
+
+        this.state = {
+            config: origConfig,
+            data: this.getData(origConfig, origData)
+        }
+    }
+
+    getAddRowCell() {
+        return {value: '', readOnly: true, className: 'add read-only', component: (
                     <button onClick={() => this.addRow() }>
                         +
                     </button>
                 ), forceComponent: true};
+    }
 
-        const addColCell = {value: '', readOnly: true, component: (
+    getAddColCell() {
+        return {value: '', readOnly: true, className: 'add read-only', component: (
                     <button onClick={() => this.addCol() }>
                         +
                     </button>
                 ), forceComponent: true}
-
-        this.state = {
-            config: {
-                'rows': 10,
-                'cols': 5
-            },
-            data: [
-                [{value: '', readOnly: true}, {value: 'A', readOnly: true}, addColCell],
-                [{value: 1, readOnly: true},{value: 4}],
-                [{value: 2, readOnly: true},{value: 6}],
-                [{value: 3, readOnly: true},{value: 8}],
-                [{value: 4, readOnly: true},{value: 10}],
-                [addRowCell]
-            ]
-        }
     }
 
-    getData() {
-        let config = this.state.config;
-        let data = this.state.data;
+    getData(config, data) {
         const rows = config.rows;
         const cols = config.cols;
 
+        // Go through each existing row
         const newRows = data.map((row, idx) => {
             // First row
             if (idx == 0) {
@@ -58,7 +65,8 @@ class Main extends Component {
             }
 
             const vals = row;
-            for (var i = row.length - 1; i < cols; i++) {
+            vals[0] = { value: idx, readOnly: true };
+            for (var i = row.length; i < cols; i++) {
                 vals[i] = {value: ''};
             }
             return vals;
@@ -79,20 +87,10 @@ class Main extends Component {
         }
 
         // addRow option
-        newRows[newRows.length - 1][0] = {
-            value: '', readOnly: true, component: (
-                    <button onClick={() => this.addRow() }>
-                        +
-                    </button>
-                ), forceComponent: true}
+        newRows[newRows.length - 1][0] = this.getAddRowCell();
 
         // addCol option
-        newRows[0][cols - 1] = {
-            value: '', readOnly: true, component: (
-                    <button onClick={() => this.addCol() }>
-                        +
-                    </button>
-                ), forceComponent: true}
+        newRows[0][cols - 1] = this.getAddColCell();
 
         return newRows;
     }
@@ -103,7 +101,7 @@ class Main extends Component {
 
         this.setState({
             config: config,
-            data: this.getData()
+            data: this.getData(config, this.state.data)
         })
     }
 
@@ -113,7 +111,7 @@ class Main extends Component {
 
         this.setState({
             config: config,
-            data: this.getData()
+            data: this.getData(config, this.state.data)
         })
     }
 

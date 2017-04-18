@@ -6,7 +6,7 @@ body {
 }
 
 .sheet-container {
-    width: 500px;
+    width: 1000px;
 }
 
 table {
@@ -34,4 +34,8 @@ tr {
 
 td, th {
     display: table-cell;
+}
+
+table.data-grid td.cell.add {
+    text-align: center;
 }
