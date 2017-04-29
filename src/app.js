@@ -80,7 +80,8 @@ class Main extends Component {
         }
 
         for (var i = data.length - 1; i < rows; i++) {
-            const newRow = Array.from(emptyRow);
+            // Need to do it this way as a deep copy
+            const newRow =  JSON.parse(JSON.stringify(emptyRow));
             newRow[0] = {value: i, readOnly: true};
 
             newRows.push(newRow);
