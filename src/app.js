@@ -4,6 +4,10 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 
 import ReactDataSheet from 'react-datasheet';
+import mathjs from 'mathjs';
+import _ from 'lodash';
+
+// https://github.com/nadbm/react-datasheet/blob/master/docs/src/examples/MathSheet.js
 
 class Main extends Component {
     constructor(props){
@@ -116,6 +120,57 @@ class Main extends Component {
         })
     }
 
+    validateExp(trailKeys, expr) {
+        let valid = true;
+        const matches = expr.match(/[A-Z][1-9]+/g) || [];
+        matches.map(match => {
+        if(trailKeys.indexOf(match) > -1) {
+            valid = false
+        } else {
+            valid = this.validateExp([...trailKeys, match], this.state[match].expr)
+        }
+        })
+        return valid
+    }
+
+    computeExpr(key, expr, scope) {
+        let value = null;
+        if(expr.charAt(0) !== '=') {
+            return {className: '', value: expr, expr: expr};
+        } else {
+            try {
+                value = mathjs.eval(expr.substring(1), scope)
+            } catch(e) {
+                value = null
+            }
+
+            if(value !== null && this.validateExp([key], expr)) {
+                return {className: 'equation', value, expr}
+            } else {
+                return {className: 'error', value: 'error', expr: ''}
+            }
+        }
+    }
+
+    cellUpdate(state, changeCell, expr) {
+        const scope = _.mapValues(state, (val) => isNaN(val.value) ? 0 : parseFloat(val.value))
+        const updatedCell = _.assign({}, changeCell, this.computeExpr(changeCell.key, expr, scope))
+        state[changeCell.key] = updatedCell
+
+        _.each(state, (cell, key) => {
+        if(cell.expr.charAt(0) === '=' && cell.expr.indexOf(changeCell.key) > -1 && key !== changeCell.key) {
+            state = this.cellUpdate(state, cell, cell.expr)
+        }
+        })
+        return state
+    }
+
+    onChange(changeCell, i, j, expr) {
+        const state = _.assign({}, this.state)
+        this.cellUpdate(state, changeCell, expr)
+        this.setState(state)
+    }
+
     render(){
         return (
             <div>
@@ -124,6 +179,7 @@ class Main extends Component {
                     <ReactDataSheet
                         data={this.state.data}
                         valueRenderer={(cell) => cell.value}
+                        dataRenderer={(cell) => cell.expr || cell.value}
                         onChange={(cell, colI, rowJ, value) =>
                             this.setState({
                                 data: this.state.data.map((col) =>
