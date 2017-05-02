@@ -31,6 +31,8 @@ class Main extends Component {
             config: origConfig,
             data: this.getData(origConfig, origData)
         }
+
+        this.onChange = this.onChange.bind(this);
     }
 
     getAddRowCell() {
@@ -180,15 +182,7 @@ class Main extends Component {
                         data={this.state.data}
                         valueRenderer={(cell) => cell.value}
                         dataRenderer={(cell) => cell.expr || cell.value}
-                        onChange={(cell, colI, rowJ, value) =>
-                            this.setState({
-                                data: this.state.data.map((col) =>
-                                    col.map((rowCell) =>
-                                        (rowCell == cell) ? ({value: value}) : rowCell
-                                    )
-                                )
-                            })
-                        }
+                        onChange={this.onChange}
                     />
                 </div>
             </div>
