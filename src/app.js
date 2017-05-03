@@ -14,11 +14,11 @@ class Main extends Component {
         super(props)
 
         const origData = [
-            [{value: '', readOnly: true}, {value: 'A', readOnly: true}, this.getAddColCell()],
-            [{value: 1, readOnly: true}],
-            [{value: 2, readOnly: true}],
-            [{value: 3, readOnly: true}],
-            [{value: 4, readOnly: true}],
+            [{value: '', expr: '', readOnly: true}, {value: 'A', expr: 'A', readOnly: true}, this.getAddColCell()],
+            [{value: 1, expr: 1, readOnly: true}],
+            [{value: 2, expr: 1, readOnly: true}],
+            [{value: 3, expr: 1, readOnly: true}],
+            [{value: 4, expr: 1, readOnly: true}],
             [this.getAddRowCell()]
         ];
 
@@ -36,7 +36,7 @@ class Main extends Component {
     }
 
     getAddRowCell() {
-        return {value: '', readOnly: true, className: 'add read-only', component: (
+        return {value: '', expr: '', readOnly: true, className: 'add read-only', component: (
                     <button onClick={() => this.addRow() }>
                         +
                     </button>
@@ -44,7 +44,7 @@ class Main extends Component {
     }
 
     getAddColCell() {
-        return {value: '', readOnly: true, className: 'add read-only', component: (
+        return {value: '', expr: '', readOnly: true, className: 'add read-only', component: (
                     <button onClick={() => this.addCol() }>
                         +
                     </button>
@@ -64,16 +64,16 @@ class Main extends Component {
                 for (var i = row.length - 1; i < cols; i++) {
                     // TODO: Go past 26
                     const char = String.fromCharCode(65 + i);
-                    vals[i] = {value: char, readOnly: true};
+                    vals[i] = {value: char, expr: char, readOnly: true};
                 }
 
                 return vals;
             }
 
             const vals = row;
-            vals[0] = { value: idx, readOnly: true };
+            vals[0] = { value: idx, expr: idx, readOnly: true };
             for (var i = row.length; i < cols; i++) {
-                vals[i] = {value: ''};
+                vals[i] = {value: '', expr: ''};
             }
             return vals;
         });
@@ -82,13 +82,13 @@ class Main extends Component {
 
         const emptyRow = [];
         for (var i = 0; i < cols; i++) {
-            emptyRow[i] = {value: ''};
+            emptyRow[i] = {value: '', expr: ''};
         }
 
         for (var i = data.length - 1; i < rows; i++) {
             // Need to do it this way as a deep copy
             const newRow =  JSON.parse(JSON.stringify(emptyRow));
-            newRow[0] = {value: i, readOnly: true};
+            newRow[0] = {value: i, expr: i, readOnly: true};
 
             newRows.push(newRow);
         }
@@ -160,15 +160,17 @@ class Main extends Component {
         state[changeCell.key] = updatedCell
 
         _.each(state, (cell, key) => {
-        if(cell.expr.charAt(0) === '=' && cell.expr.indexOf(changeCell.key) > -1 && key !== changeCell.key) {
-            state = this.cellUpdate(state, cell, cell.expr)
-        }
+            debugger;
+
+            if(cell.expr.charAt(0) === '=' && cell.expr.indexOf(changeCell.key) > -1 && key !== changeCell.key) {
+                state = this.cellUpdate(state, cell, cell.expr)
+            }
         })
         return state
     }
 
     onChange(changeCell, i, j, expr) {
-        const state = _.assign({}, this.state)
+        const grid = _.assign({}, this.state)
         this.cellUpdate(state, changeCell, expr)
         this.setState(state)
     }
@@ -181,7 +183,7 @@ class Main extends Component {
                     <ReactDataSheet
                         data={this.state.data}
                         valueRenderer={(cell) => cell.value}
-                        dataRenderer={(cell) => cell.expr || cell.value}
+                        dataRenderer={(cell) => cell.expr}
                         onChange={this.onChange}
                     />
                 </div>
