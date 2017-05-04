@@ -170,9 +170,12 @@ class Main extends Component {
     }
 
     onChange(changeCell, i, j, expr) {
-        const grid = _.assign({}, this.state)
-        this.cellUpdate(state, changeCell, expr)
-        this.setState(state)
+        // const data = _.assign({}, this.state.data)
+        const data = this.state.data;
+        this.cellUpdate(data, changeCell, expr)
+        this.setState({
+            data: data
+        })
     }
 
     render(){
