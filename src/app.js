@@ -154,19 +154,17 @@ class Main extends Component {
         }
     }
 
-    cellUpdate(state, changeCell, expr) {
-        const scope = _.mapValues(state, (val) => isNaN(val.value) ? 0 : parseFloat(val.value))
+    cellUpdate(data, changeCell, expr) {
+        const scope = _.mapValues(data, (val) => isNaN(val.value) ? 0 : parseFloat(val.value))
         const updatedCell = _.assign({}, changeCell, this.computeExpr(changeCell.key, expr, scope))
-        state[changeCell.key] = updatedCell
+        data[changeCell.key] = updatedCell
 
-        _.each(state, (cell, key) => {
-            debugger;
-
+        _.each(data, (cell, key) => {
             if(cell.expr.charAt(0) === '=' && cell.expr.indexOf(changeCell.key) > -1 && key !== changeCell.key) {
-                state = this.cellUpdate(state, cell, cell.expr)
+                data = this.cellUpdate(data, cell, cell.expr)
             }
         })
-        return state
+        return data
     }
 
     onChange(changeCell, i, j, expr) {
@@ -174,7 +172,7 @@ class Main extends Component {
         const data = this.state.data;
         this.cellUpdate(data, changeCell, expr)
         this.setState({
-            data: data
+            data
         })
     }
 
